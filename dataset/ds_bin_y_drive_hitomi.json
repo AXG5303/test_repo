@@ -1,0 +1,26 @@
+{
+	"name": "ds_bin_y_drive_hitomi",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_y_drive_hitomi",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SubPath": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": {
+					"value": "@dataset().SubPath",
+					"type": "Expression"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

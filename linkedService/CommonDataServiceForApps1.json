@@ -1,0 +1,33 @@
+{
+	"name": "CommonDataServiceForApps1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "CommonDataServiceForApps",
+		"annotations": [],
+		"parameters": {
+			"url": {
+				"type": "string",
+				"defaultValue": "https://set_me_in_pipeline_using_global_paramters.com"
+			},
+			"servicePrincipalId": {
+				"type": "string",
+				"defaultValue": "dc65b55d-ee54-45c4-9beb-16132afeeeb8"
+			}
+		},
+		"typeProperties": {
+			"deploymentType": "Online",
+			"serviceUri": "@{linkedService().url}",
+			"authenticationType": "AADServicePrincipal",
+			"servicePrincipalCredentialType": "ServicePrincipalKey",
+			"servicePrincipalId": "@{linkedService().servicePrincipalId}",
+			"servicePrincipalCredential": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "kv_rain",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "crest-appreg-service-principal-key"
+			}
+		}
+	}
+}

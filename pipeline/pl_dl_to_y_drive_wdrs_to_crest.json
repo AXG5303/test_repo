@@ -1,0 +1,542 @@
+{
+	"name": "pl_dl_to_y_drive_wdrs_to_crest",
+	"properties": {
+		"description": "Copy all output files from data lake to Y drive after WDRS to CREST transformation",
+		"activities": [
+			{
+				"name": "Data Lake to Y",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set SubFolderName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(\n'COVID/Data/Enriched/CREST/WdrsToCrest/Output/',\nvariables('FolderDate'),\n'/',\nvariables('SubFolderName')\n)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.csv",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings",
+							"maxConcurrentConnections": 1,
+							"copyBehavior": "PreserveHierarchy"
+						}
+					},
+					"enableStaging": false,
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Info",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"path": "prototype/COVID"
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bin_dohsaadlrain_datalake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_bin_y_drive_hitomi",
+						"type": "DatasetReference",
+						"parameters": {
+							"SubPath": {
+								"value": "@concat('Confidential\\DCHS\\CDE\\01_Linelists_Cross Coverage\\Novel CoV\\CREST\\DailyTransformation\\WdrsToCrest\\DEV\\Output\\',\nvariables('FolderDate'),\n'/',\nvariables('SubFolderName'),\n'/',\npipeline().parameters.AdditionalSubFolderName\n)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Set FolderName from CurrentDate",
+				"description": "Get data lake folder based on current date",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FolderDate",
+					"value": {
+						"value": "@if(empty(string(pipeline().parameters.FolderDate)),\nformatDateTime(utcnow(),'yyyy-MM-dd'),\npipeline().parameters.FolderDate)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set SubFolderName",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Filter Sub Folder Names",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "SubFolderName",
+					"value": {
+						"value": "@if(empty(string(pipeline().parameters.SubFolderName)),\n\tif(less(length(string(max(variables('SubFolderNames')))), 4), concat('0', string(max(variables('SubFolderNames'))))\n\t, string(max(variables('SubFolderNames')))),\npipeline().parameters.SubFolderName)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get Sub Folder Names",
+				"description": "Get all sub folders of dated parent folder",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Set FolderName from CurrentDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "save_Datalake_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"FilePath": {
+								"value": "@concat(\n'COVID/Data/Enriched/CREST/WdrsToCrest/Output/',\nvariables('FolderDate'),\n'/'\n)",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Filter Sub Folder Names",
+				"description": "Filter out sub folder names that are not a number representing hhmm",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Sub Folder Names",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Sub Folder Names').output.childitems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "SubFolderNames",
+								"value": {
+									"value": "@int(item().name)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "Append variable1",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Data Lake to Y_working",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Wait2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"wildcardFolderPath": {
+								"value": "COVID/Data/Raw/CREST/WdrsToCrest/Working/",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings",
+							"maxConcurrentConnections": 1,
+							"copyBehavior": "PreserveHierarchy"
+						}
+					},
+					"enableStaging": false,
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Info",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"path": "prototype/COVID"
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bin_dohsaadlrain_datalake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_bin_y_drive_hitomi",
+						"type": "DatasetReference",
+						"parameters": {
+							"SubPath": {
+								"value": "Confidential\\DCHS\\CDE\\01_Linelists_Cross Coverage\\Novel CoV\\CREST\\DailyTransformation\\WdrsToCrest\\DEV\\Working",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Data Lake to Y_Roster",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set SubFolderName_Roster",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(\n'COVID/Data/Enriched/CREST/WdrsToCrest/Output/InvestigationStartDateRoster/',\nvariables('FolderDate'),\n'/',\nvariables('SubFolderName_roster')\n)",
+								"type": "Expression"
+							},
+							"wildcardFileName": {
+								"value": "*",
+								"type": "Expression"
+							},
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings",
+							"maxConcurrentConnections": 1,
+							"copyBehavior": "PreserveHierarchy"
+						}
+					},
+					"enableStaging": false,
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Info",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"path": "prototype/COVID"
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bin_dohsaadlrain_datalake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_bin_y_drive_hitomi",
+						"type": "DatasetReference",
+						"parameters": {
+							"SubPath": {
+								"value": "Confidential\\DCHS\\CDE\\01_Linelists_Cross Coverage\\Novel CoV\\CREST\\DailyTransformation\\WdrsToCrest\\DEV\\Output\\InvestigationStartDateRoster",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Wait2",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Get Sub Folder Names_Roster",
+				"description": "Get all sub folders of dated parent folder",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Set FolderName from CurrentDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "save_Datalake_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"FilePath": {
+								"value": "@concat(\n'COVID/Data/Enriched/CREST/WdrsToCrest/Output/InvestigationStartDateRoster/',\nvariables('FolderDate'),\n'/'\n)",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Filter Sub Folder Names_Roster",
+				"description": "Filter out sub folder names that are not a number representing hhmm",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Sub Folder Names_Roster",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Sub Folder Names_Roster').output.childitems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Append variable1_Roster",
+							"type": "AppendVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "SubFolderNames_roster",
+								"value": {
+									"value": "@int(item().name)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Wait1_copy1",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "Append variable1_Roster",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Set SubFolderName_Roster",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Filter Sub Folder Names_Roster",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "SubFolderName_roster",
+					"value": {
+						"value": "@if(empty(string(pipeline().parameters.SubFolderName_roster)),\n\tif(less(length(string(max(variables('SubFolderNames_roster')))), 4), concat('0', string(max(variables('SubFolderNames_roster'))))\n\t, string(max(variables('SubFolderNames_roster')))),\npipeline().parameters.SubFolderName_roster)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"FolderDate": {
+				"type": "string"
+			},
+			"SubFolderName": {
+				"type": "string"
+			},
+			"AdditionalSubFolderName": {
+				"type": "string"
+			},
+			"SubFolderName_roster": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"FolderDate": {
+				"type": "String"
+			},
+			"SubFolderName": {
+				"type": "String"
+			},
+			"SubFolderNames": {
+				"type": "Array"
+			},
+			"SubFolderNames_roster": {
+				"type": "Array"
+			},
+			"SubFolderName_roster": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Copy to Y Drive"
+		},
+		"annotations": [
+			"WDRStoCREST"
+		],
+		"lastPublishTime": "2021-06-17T16:20:37Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

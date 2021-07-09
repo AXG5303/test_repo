@@ -1,0 +1,102 @@
+{
+	"name": "pl_dl_to_y_drive_demo",
+	"properties": {
+		"description": "Pipeline to copy a file from the data lake to the y drive.",
+		"activities": [
+			{
+				"name": "Set FolderName",
+				"description": "Set folder name to current date",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FolderName",
+					"value": {
+						"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy from  FolderName in data lake to Y drive",
+				"description": "Copy from  FolderName in data lake to Y drive",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set FolderName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(\n\n'COVID/Data/Enriched/DemoData/',\nvariables('FolderName'),\n'/'\n\n)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.csv",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bin_dohsaadlrain_datalake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_bin_y_drive_demo",
+						"type": "DatasetReference",
+						"parameters": {
+							"YDrivePath": {
+								"value": "@concat(\n'Confidential\\DCHS\\CDE\\01_Linelists_Cross Coverage\\Novel CoV\\01 - Epi\\Report_and_Dashboard\\NewNegatives\\PipelineTesting\\YDriveDemoFolder\\',\nvariables('FolderName'),\n'\\'\n)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"variables": {
+			"FolderName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Copy to Y Drive"
+		},
+		"annotations": [
+			"Training",
+			"Training",
+			"Training"
+		],
+		"lastPublishTime": "2021-06-17T16:20:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

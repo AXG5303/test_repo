@@ -1,0 +1,65 @@
+{
+	"name": "pl_test_email_with_env",
+	"properties": {
+		"activities": [
+			{
+				"name": "Send Test Email",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-11.usgovtexas.logic.azure.us:443/workflows/26d3ba758df04fa78a00f4f05e3fee7f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iSETTQkK2O73Y-5bA727dEn7alHI4IXrwvS0Iz-kPwE",
+					"method": "POST",
+					"body": {
+						"value": "{\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Send Test Email",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Wait1_copy1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"annotations": [
+			"Training"
+		],
+		"lastPublishTime": "2021-06-17T16:20:31Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

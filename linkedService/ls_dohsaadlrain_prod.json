@@ -1,0 +1,23 @@
+{
+	"name": "ls_dohsaadlrain_prod",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://dohsaadlrainprod.dfs.core.windows.net/",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "kv_rain",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "dohsaadlrainprod-key"
+			}
+		},
+		"connectVia": {
+			"referenceName": "ir-rain-dev",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

@@ -1,0 +1,93 @@
+{
+	"name": "pl_dl_to_y_drive_sample_wdrs_to_crest",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data Lake to Y",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat('COVID/Data/Enriched/CREST/WdrsToCrest/Output/', pipeline().parameters.FolderDate)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.csv",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings",
+							"maxConcurrentConnections": 1
+						}
+					},
+					"enableStaging": false,
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Info",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "AzureDataLakeStorage1",
+								"type": "LinkedServiceReference"
+							},
+							"path": "prototype/COVID"
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bin_dohsaadlrain_datalake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_bin_y_drive_hitomi",
+						"type": "DatasetReference",
+						"parameters": {
+							"SubPath": "/path/to/folder"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"FolderDate": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"FolderDate": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Copy to Y Drive"
+		},
+		"annotations": [
+			"Training"
+		],
+		"lastPublishTime": "2021-06-17T16:20:33Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

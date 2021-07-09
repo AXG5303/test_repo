@@ -1,0 +1,10 @@
+{
+	"name": "dohsaadlraindev",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/1804851e-a29d-408b-8e1d-943a4a62da95/resourceGroups/rg-cda-dev/providers/Microsoft.Storage/storageAccounts/dohsaadlraindev",
+		"groupId": "dfs",
+		"fqdns": [
+			"dohsaadlraindev.dfs.core.windows.net"
+		]
+	}
+}

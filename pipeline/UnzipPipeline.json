@@ -1,0 +1,68 @@
+{
+	"name": "UnzipPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "negativelabs/Data/Archive/Sunday/csv/databaseSunday.zip"
+					},
+					{
+						"name": "Destination",
+						"value": "negativelabs/Data/Archive/Sunday/csv/databaseSunday.csv"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings"
+							}
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_ph4",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_ph4",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [
+			"Training"
+		],
+		"lastPublishTime": "2021-06-17T16:20:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

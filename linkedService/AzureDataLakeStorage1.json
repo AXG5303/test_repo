@@ -1,0 +1,13 @@
+{
+	"name": "AzureDataLakeStorage1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [
+			"Data Lake"
+		],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://dohsaadlraindev.dfs.core.windows.net/"
+		}
+	}
+}

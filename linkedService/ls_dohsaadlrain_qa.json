@@ -1,0 +1,11 @@
+{
+	"name": "ls_dohsaadlrain_qa",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://dohsaadlrainqa.dfs.core.windows.net/"
+		}
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"name": "ls_WDRS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "kv_rain",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "adf-wdrs-connection-string"
+			}
+		},
+		"connectVia": {
+			"referenceName": "ir-rain-dev",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

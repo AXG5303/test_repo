@@ -1,0 +1,12 @@
+{
+	"name": "ir-rain-dev",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/1804851e-a29d-408b-8e1d-943a4a62da95/resourcegroups/rg-cda-dev/providers/Microsoft.DataFactory/factories/adf-rain-dev/integrationruntimes/ir-rain-dev",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

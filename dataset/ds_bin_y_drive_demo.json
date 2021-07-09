@@ -1,0 +1,27 @@
+{
+	"name": "ds_bin_y_drive_demo",
+	"properties": {
+		"description": "Y drive demo data set",
+		"linkedServiceName": {
+			"referenceName": "ls_y_drive_kevin",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"YDrivePath": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": {
+					"value": "@dataset().YDrivePath",
+					"type": "Expression"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

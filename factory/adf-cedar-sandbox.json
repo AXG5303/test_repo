@@ -1,0 +1,77 @@
+{
+	"name": "adf-cedar-sandbox",
+	"properties": {
+		"globalParameters": {
+			"kv_rain": {
+				"type": "string",
+				"value": "kv-cedar-sandbox"
+			},
+			"dohsaadlrain": {
+				"type": "string",
+				"value": "dohsaadlraindev"
+			},
+			"databricks_url": {
+				"type": "string",
+				"value": "https://adb-500038904385926.6.azuredatabricks.net/"
+			},
+			"databricks_cluster_id": {
+				"type": "string",
+				"value": "1204-130451-tares765"
+			},
+			"dohsaadlrain_url": {
+				"type": "string",
+				"value": "https://dohsaadlraindev.dfs.core.windows.net/"
+			},
+			"log_url": {
+				"type": "string",
+				"value": "https://apim-rain-dev.azure-api.net/v1/Log"
+			},
+			"Ocp_Apim_Subscription_Key": {
+				"type": "string",
+				"value": "7803b16f67ea43f39089561a909e34b5"
+			},
+			"accountable_county_dq_pipeline_started": {
+				"type": "string",
+				"value": "https://prod-00.usgovtexas.logic.azure.us:443/workflows/f5724685b0c349239de15bfba1b7f45b/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=O_MU03h-Sp2D6-Sj9aSfidxMNYDKjlnRjP_saRh9noE"
+			},
+			"accountable_county_dq_pipeline_success": {
+				"type": "string",
+				"value": "https://prod-11.usgovtexas.logic.azure.us:443/workflows/26d3ba758df04fa78a00f4f05e3fee7f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=iSETTQkK2O73Y-5bA727dEn7alHI4IXrwvS0Iz-kPwE"
+			},
+			"accountable_county_dq_pipeline_failed": {
+				"type": "string",
+				"value": "https://prod-27.usgovtexas.logic.azure.us:443/workflows/3d148a1cb47147ec97e71afd1fcc0c99/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=P09abrQyCAiEKQNXjfs7KWba5BC-lWta7F0U382HLts"
+			},
+			"epi_report_create_success": {
+				"type": "string",
+				"value": "https://prod-17.usgovtexas.logic.azure.us:443/workflows/6f6042117a524e70b5739b9dac4394d5/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jIG8PGG1XKb3shypfdXE9-xtNQoDBTddjiNunteZe50"
+			},
+			"epi_report_create_failed": {
+				"type": "string",
+				"value": "https://prod-31.usgovtexas.logic.azure.us:443/workflows/79a57de5dce646abb0441c8841794459/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jy4FLd19R-exa-nkjfvuQkMqNKS-HjkXs8S0kDXHifI"
+			},
+			"epi_report_copy_wdrs_tables_failed": {
+				"type": "string",
+				"value": "https://prod-20.usgovtexas.logic.azure.us:443/workflows/3ee5aff71acd49438ea3e6505e3fd493/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VBKKmK8NtK94yle-yxD9KHd_bMnZ6_xUrdhsy6PS1Us"
+			},
+			"kv_url": {
+				"type": "string",
+				"value": "https://kv-cedar-sandbox.vault.azure.net/"
+			},
+			"databricks_cluster_id_edi_reports": {
+				"type": "string",
+				"value": "0108-133434-saver147"
+			},
+			"databricks_cluster_id_data_quality": {
+				"type": "string",
+				"value": "0129-130337-autos202"
+			}
+		}
+	},
+	"location": "westus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "77afe00b-abc0-436c-83fd-22b57081ee19",
+		"tenantId": "3e77021a-7e1d-4d9d-a365-50466fc2c9cd"
+	}
+}

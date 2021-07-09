@@ -1,0 +1,18 @@
+{
+	"name": "ds_bin_dohsaadlrain_datalake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "datalake"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

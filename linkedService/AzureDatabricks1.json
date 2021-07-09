@@ -1,0 +1,37 @@
+{
+	"name": "AzureDatabricks1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"Databricks_url": {
+				"type": "String",
+				"defaultValue": "https://adb-500038904385926.6.azuredatabricks.net/"
+			},
+			"Databricks_cluster_id": {
+				"type": "string",
+				"defaultValue": "0108-133434-saver147"
+			},
+			"Databricks_access_token_kv_secret": {
+				"type": "string",
+				"defaultValue": "adf-dbx-access-token"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "@linkedService().Databricks_url",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "kv_rain",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": {
+					"value": "@linkedService().Databricks_access_token_kv_secret",
+					"type": "Expression"
+				}
+			},
+			"existingClusterId": "@linkedService().Databricks_cluster_id"
+		}
+	}
+}

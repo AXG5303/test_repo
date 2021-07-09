@@ -1,0 +1,17 @@
+{
+	"name": "ls_y_drive",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "\\\\dohfltum13.doh.wa.lcl\\data\\",
+			"userId": "doh\\KXMB303",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJjMWRiYjJmOC01NjE0LTQyN2QtYmIwMi02ODYzYzRjOTg2MWUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "ir-rain-dev",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

@@ -1,0 +1,173 @@
+{
+	"name": "EPI Reports",
+	"properties": {
+		"description": "Calls Databricks to run the morning and afternoon EPI Report",
+		"activities": [
+			{
+				"name": "Create Epi Report",
+				"description": "Will call the update_WDRS_12_18_DR notebook which will create the output Data Products",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy the NegativeLabs output file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/Epi Reports/update_WDRS_12_18_DR"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"Databricks_url": "https://adb-500038904385926.6.azuredatabricks.net/",
+						"Databricks_cluster_id": {
+							"value": "@pipeline().globalParameters.databricks_cluster_id_edi_reports",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy the NegativeLabs output file",
+				"description": "This notebook will copy the NegativeLabs output file and place it in the correct input folder.",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/Datalake ETL/Load Raw/Negative Labs"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"Databricks_url": {
+							"value": "@pipeline().globalParameters.databricks_url",
+							"type": "Expression"
+						},
+						"Databricks_cluster_id": {
+							"value": "@pipeline().globalParameters.Databricks_cluster_id_edi_reports",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Send Copy Failed Email",
+				"description": "Copy Negative Labs data failed send email from Power Automate using Global parameter url found in monitor",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Copy the NegativeLabs output file",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@pipeline().globalParameters.epi_report_copy_wdrs_tables_failed",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"body": {
+						"value": "{\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Send Epi Report Failed",
+				"description": "Send an email that the Create Epi Report Failed",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Create Epi Report",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@pipeline().globalParameters.epi_report_create_failed",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"body": {
+						"value": "{\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Send Epi Report Success",
+				"description": "Send Success Email ",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Create Epi Report",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@pipeline().globalParameters.epi_report_create_success",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"body": {
+						"value": "{\n}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-06-17T16:20:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
