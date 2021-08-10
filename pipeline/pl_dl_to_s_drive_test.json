@@ -1,0 +1,94 @@
+{
+	"name": "pl_dl_to_s_drive_test",
+	"properties": {
+		"description": "training pipeline to savings to s drive.",
+		"activities": [
+			{
+				"name": "set FolderName",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FolderName",
+					"value": {
+						"value": "@formatDateTime(utcnow(), 'yyyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data from FolderName to S drive",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "set FolderName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Training/alexey.gilman@doh.wa.gov/REDCaptest_2021_08_06_1009.csv",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_bin_dohsaadlrain_datalake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_csv_s_drive_demo",
+						"type": "DatasetReference",
+						"parameters": {
+							"SDrivePath": {
+								"value": "@concat(\n\n' \\DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\n\nvariables('FolderName').\n\n'\\'\n)\n",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"variables": {
+			"FolderName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Copy to Y Drive"
+		},
+		"annotations": []
+	}
+}
