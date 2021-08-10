@@ -12,7 +12,7 @@
 			"location": {
 				"type": "FileServerLocation",
 				"folderPath": {
-					"value": "@concat(\n\n'DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\n\n'\\'\n\n)",
+					"value": "@concat(\n\n'\\DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\n\n'\\'\n\n)",
 					"type": "Expression"
 				}
 			}
