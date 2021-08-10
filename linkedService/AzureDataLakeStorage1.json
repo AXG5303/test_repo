@@ -8,6 +8,10 @@
 		"type": "AzureBlobFS",
 		"typeProperties": {
 			"url": "https://dohsaadlraindev.dfs.core.windows.net/"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
 		}
 	}
 }
