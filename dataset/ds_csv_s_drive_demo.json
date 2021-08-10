@@ -1,0 +1,30 @@
+{
+	"name": "ds_csv_s_drive_demo",
+	"properties": {
+		"description": "S drive demo dataset (settings). ",
+		"linkedServiceName": {
+			"referenceName": "ls_s_drive_alexey",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SDrivePath": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": {
+					"value": "@dataset().SDrivePath",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
