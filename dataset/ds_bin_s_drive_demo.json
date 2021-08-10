@@ -1,0 +1,21 @@
+{
+	"name": "ds_bin_s_drive_demo",
+	"properties": {
+		"description": "dataset for copy demo to s drive",
+		"linkedServiceName": {
+			"referenceName": "ls_s_drive_alexey",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": {
+					"value": "@concat(\n\n'DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\n\n'\\'\n\n)",
+					"type": "Expression"
+				}
+			}
+		}
+	}
+}
