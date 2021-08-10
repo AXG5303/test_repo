@@ -8,7 +8,7 @@
 		"typeProperties": {
 			"host": "\\\\dohfltum01.doh.wa.lcl\\division\\",
 			"userId": "AXG5303",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4NmM2YzNkNy01YTIyLTQzYWYtYmU0NS0yZGFlNmRmMzFhNGQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIyOWJjMDdkNS03MDAxLTQ0NTEtOWQyZS1mNWQ0MzgzMGI0MzYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "ir-rain-dev",
