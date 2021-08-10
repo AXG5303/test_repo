@@ -7,8 +7,8 @@
 		"type": "FileServer",
 		"typeProperties": {
 			"host": "\\\\dohfltum01.doh.wa.lcl\\division\\",
-			"userId": "AXG5303",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIyOWJjMDdkNS03MDAxLTQ0NTEtOWQyZS1mNWQ0MzgzMGI0MzYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"userId": "doh\\axg5303",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2NmE5YzEzNy1hMjVmLTQ2Y2EtYjlkOC1hMjM2NTMyODY3ZmUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "ir-rain-dev",
