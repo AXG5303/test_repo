@@ -6,13 +6,18 @@
 			"referenceName": "ls_s_drive_alexey",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"SDrivePath": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
 			"location": {
 				"type": "FileServerLocation",
 				"folderPath": {
-					"value": "@concat(\n\n'\\DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\n\n'\\'\n\n)",
+					"value": "@dataset().SDrivePath",
 					"type": "Expression"
 				}
 			}
