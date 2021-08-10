@@ -67,7 +67,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"SDrivePath": {
-								"value": "@concat(\n'DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\nvariables('FolderName'),\n'\\'\n\n)",
+								"value": "@concat(\n'DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo\\',\nvariables('FolderName')\n\n)",
 								"type": "Expression"
 							}
 						}
