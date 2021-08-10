@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"folderPath": "Training/alexey.gilman@doh.wa.gov/REDCaptest_2021_08_06_1009.csv",
 				"fileSystem": "datalake"
 			}
 		}
