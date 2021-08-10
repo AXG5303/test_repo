@@ -40,8 +40,7 @@
 						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "Training/alexey.gilman@doh.wa.gov/REDCaptest_2021_08_06_1009.csv",
+							"recursive": false,
 							"deleteFilesAfterCompletion": false
 						},
 						"formatSettings": {
