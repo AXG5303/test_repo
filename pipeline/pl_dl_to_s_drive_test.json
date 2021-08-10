@@ -48,14 +48,9 @@
 						}
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
+						"type": "BinarySink",
 						"storeSettings": {
 							"type": "FileServerWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
 						}
 					},
 					"enableStaging": false
@@ -68,11 +63,11 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_csv_s_drive_demo",
+						"referenceName": "ds_bin_s_drive_demo",
 						"type": "DatasetReference",
 						"parameters": {
 							"SDrivePath": {
-								"value": "@concat(\n\n' \\DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\n\nvariables('FolderName').\n\n'\\'\n)\n",
+								"value": "@concat(\n'DCHS\\PHOCIS\\Informatics\\System Support Unit\\RedCap\\REDCap_demo',\nvariables('FolderName'),\n'/'\n\n)",
 								"type": "Expression"
 							}
 						}
